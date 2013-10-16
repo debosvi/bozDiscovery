@@ -1,0 +1,38 @@
+
+
+comment "Module MOD_UPPER DISABLED (no sources available for delivery)."
+    depends on !BUILD_MODULE_MOD_UPPER
+
+comment "Module MOD_UPPER ENABLED (generates library and daemon item)."
+    depends on BUILD_MODULE_MOD_UPPER
+
+config BUILD_MODULE_SHARED_MOD_UPPER
+    depends on BUILD_MODULE_MOD_UPPER
+    bool "Generates a shared daemon for MOD_UPPER module."
+    default n
+    help
+        Module MOD_UPPER is added to compilation.
+
+config BUILD_MODULE_STANDALONE_MOD_UPPER
+    depends on BUILD_MODULE_MOD_UPPER
+    depends on !BUILD_MODULE_SHARED_MOD_UPPER
+    bool
+    default y
+
+comment "MOD_UPPER daemon is alone."
+    depends on BUILD_MODULE_MOD_UPPER
+    depends on BUILD_MODULE_STANDALONE_MOD_UPPER
+
+comment "MOD_UPPER daemon shares resources with other daemon sub feature."
+    depends on BUILD_MODULE_MOD_UPPER
+    depends on !BUILD_MODULE_STANDALONE_MOD_UPPER
+
+config BUILD_MODULE_DAEMON_NAME_MOD_UPPER
+    depends on BUILD_MODULE_MOD_UPPER
+    depends on BUILD_MODULE_SHARED_MOD_UPPER
+    string
+    prompt "Daemon shared name"
+    default opal_daemond
+    help
+        Module MOD_UPPER is added to compilation.
+

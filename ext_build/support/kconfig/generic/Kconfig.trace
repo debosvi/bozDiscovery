@@ -1,0 +1,57 @@
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+if BUILD_MODULE_MOD_UPPER
+
+comment "Trace MOD_UPPER feature"
+
+choice
+    depends on BUILD_MODULE_MOD_UPPER
+    depends on GENERAL_TRACE
+    prompt "MOD_UPPER trace activation."
+        default $NONE
+        help
+        Choose which trace level for MOD_UPPER module.
+
+    config MOD_UPPER_TRACE_NONE
+        bool "MOD_UPPER no trace"
+        help
+                Shows no messages
+    config MOD_UPPER_TRACE_INFO
+        bool "MOD_UPPER trace information"
+        help
+                Shows only Information, Notice, Warning and Error messages
+    config MOD_UPPER_TRACE_NOTICE
+        bool "MOD_UPPER trace notice"
+        help
+                Shows only Notice, Warning and Error messages
+    config MOD_UPPER_TRACE_WARN
+        bool "MOD_UPPER trace warning"
+        help
+                Shows Warning and Error messages
+    config MOD_UPPER_TRACE_ERROR
+        bool "MOD_UPPER trace error"
+        help
+                Shows Error messages
+endchoice
+
+if BUILD_MODULE_MOD_UPPER
+if GENERAL_TRACE
+    config MOD_UPPER_PLATFORM_API
+        bool "MOD_UPPER trace PLATFORM_API"
+        default n
+        help
+            Shows each call to a MOD_UPPER platform API
+endif
+endif
+
+config MOD_UPPER_DEBUG
+    depends on BUILD_MODULE_MOD_UPPER
+    depends on GDB_DEBUG
+    bool "MOD_UPPER debug logs and other stuffs"
+    default n
+    help
+        Allocate information for MOD_UPPER debugging.
+
+endif

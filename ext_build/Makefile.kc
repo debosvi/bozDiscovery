@@ -1,0 +1,33 @@
+help_kc:
+	@echo -e "#\t\e[0;31mDefault configurations :\e[0m"
+	@$(foreach b, $(sort $(notdir $(wildcard $(CURDIR)/config/*_defconfig))), \
+	  printf "#       %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
+
+kc-%: $(BUILD_OUTPUT)
+	@$(MAKE) $(VERBOSE) -C ext_build/support/kconfig BUILD_TYPE=$(BUILD_TYPE) obj=$(BUILD_OUTPUT) $*
+ifneq ($(wildcard $(BUILD_OUTPUT)/Makefile),)
+	@$(MAKE) $(VERBOSE) -C $(BUILD_OUTPUT) s6EnvVars
+	@$(MAKE) $(VERBOSE) -C $(BUILD_OUTPUT) rebuild_cache
+endif
+
+menuconfig xconfig oldconfig:
+	@$(MAKE) kc-$@
+
+-include $(AUTOCONF)
+
+loadconfig: 
+ifneq ("$(RTD_KCONFIG)", "")
+	@$(MAKE) KBUILD_DEFCONFIG=$(RTD_KCONFIG) kc-defconfig
+else
+	@echo -e "No RTD_KCONFIG environment variable set!"
+endif
+
+%_defconfig: $(CURDIR)/config/%_defconfig
+	@$(MAKE) RTD_KCONFIG=$(CURDIR)/config/$@ loadconfig
+
+storeconfig:
+ifneq ("$(RTD_KCONFIG)", "")
+	@cp -v $(BUILD_OUTPUT)/.config $(RTD_KCONFIG)
+else
+	@echo -e "No RTD_KCONFIG environment variable set!"
+endif

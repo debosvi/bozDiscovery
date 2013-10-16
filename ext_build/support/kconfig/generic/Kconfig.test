@@ -1,0 +1,7 @@
+config BUILD_TEST_MODULE_MOD_UPPER
+    depends on GENERAL_TEST
+    depends on BUILD_MODULE_MOD_UPPER
+    bool "Include and generate test module MOD_UPPER."
+    default n
+    help
+        Test module MOD_UPPER is added to compilation.
