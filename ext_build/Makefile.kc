@@ -16,18 +16,18 @@ menuconfig xconfig oldconfig:
 -include $(AUTOCONF)
 
 loadconfig: 
-ifneq ("$(RTD_KCONFIG)", "")
-	@$(MAKE) KBUILD_DEFCONFIG=$(RTD_KCONFIG) kc-defconfig
+ifneq ("$(BOZ_KCONFIG)", "")
+	@$(MAKE) KBUILD_DEFCONFIG=$(BOZ_KCONFIG) kc-defconfig
 else
-	@echo -e "No RTD_KCONFIG environment variable set!"
+	@echo -e "No BOZ_KCONFIG environment variable set!"
 endif
 
 %_defconfig: $(CURDIR)/config/%_defconfig
-	@$(MAKE) RTD_KCONFIG=$(CURDIR)/config/$@ loadconfig
+	@$(MAKE) BOZ_KCONFIG=$(CURDIR)/config/$@ loadconfig
 
 storeconfig:
-ifneq ("$(RTD_KCONFIG)", "")
-	@cp -v $(BUILD_OUTPUT)/.config $(RTD_KCONFIG)
+ifneq ("$(BOZ_KCONFIG)", "")
+	@cp -v $(BUILD_OUTPUT)/.config $(BOZ_KCONFIG)
 else
-	@echo -e "No RTD_KCONFIG environment variable set!"
+	@echo -e "No BOZ_KCONFIG environment variable set!"
 endif

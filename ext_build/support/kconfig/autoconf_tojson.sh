@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # find defined docs in configuration file
-selected_ids=$(sed -nr 's/RTD_DOC_([[:alnum:]]+)=y/\1/p' $1 | tr '\n' ' ')
+selected_ids=$(sed -nr 's/BOZ_DOC_([[:alnum:]]+)=y/\1/p' $1 | tr '\n' ' ')
 
 # write header of output file
 rm -f $3

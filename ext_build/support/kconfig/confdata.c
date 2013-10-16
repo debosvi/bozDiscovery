@@ -39,14 +39,14 @@ static void conf_warning(const char *fmt, ...)
 
 const char *conf_get_configname(void)
 {
-    char *name = getenv("RTD_KCONFIG_CONFIG");
+    char *name = getenv("BOZ_KCONFIG_CONFIG");
 
     return name ? name : ".config";
 }
 
 const char *conf_get_autoconfig_name(void)
 {
-    char *name = getenv("RTD_KCONFIG_AUTOCONFIG");
+    char *name = getenv("BOZ_KCONFIG_AUTOCONFIG");
 
     return name ? name : "include/config/auto.conf";
 }
@@ -222,7 +222,7 @@ load:
         sym = NULL;
         switch (line[0]) {
         case '#':
-            if (memcmp(line + 2, "RTD_", 4))
+            if (memcmp(line + 2, "BOZ_", 4))
                 continue;
             p = strchr(line + 9, ' ');
             if (!p)
@@ -255,7 +255,7 @@ load:
             }
             break;
         case 'R':
-            if (memcmp(line, "RTD_", 4)) {
+            if (memcmp(line, "BOZ_", 4)) {
                 conf_warning("unexpected data");
                 continue;
             }
@@ -437,7 +437,7 @@ int conf_write(const char *name)
         basename = conf_get_configname();
 
     sprintf(newname, "%s%s", dirname, basename);
-    env = getenv("RTD_KCONFIG_OVERWRITECONFIG");
+    env = getenv("BOZ_KCONFIG_OVERWRITECONFIG");
     if (!env || !*env) {
         sprintf(tmpname, "%s.tmpconfig.%d", dirname, (int)getpid());
         out = fopen(tmpname, "w");
@@ -494,19 +494,19 @@ int conf_write(const char *name)
             case S_TRISTATE:
                 switch (sym_get_tristate_value(sym)) {
                 case no:
-                    fprintf(out, "# RTD_%s is not set\n", sym->name);
+                    fprintf(out, "# BOZ_%s is not set\n", sym->name);
                     break;
                 case mod:
-                    fprintf(out, "RTD_%s=m\n", sym->name);
+                    fprintf(out, "BOZ_%s=m\n", sym->name);
                     break;
                 case yes:
-                    fprintf(out, "RTD_%s=y\n", sym->name);
+                    fprintf(out, "BOZ_%s=y\n", sym->name);
                     break;
                 }
                 break;
             case S_STRING:
                 str = sym_get_string_value(sym);
-                fprintf(out, "RTD_%s=\"", sym->name);
+                fprintf(out, "BOZ_%s=\"", sym->name);
                 while (1) {
                     l = strcspn(str, "\"\\");
                     if (l) {
@@ -522,12 +522,12 @@ int conf_write(const char *name)
             case S_HEX:
                 str = sym_get_string_value(sym);
                 if (str[0] != '0' || (str[1] != 'x' && str[1] != 'X')) {
-                    fprintf(out, "RTD_%s=%s\n", sym->name, str);
+                    fprintf(out, "BOZ_%s=%s\n", sym->name, str);
                     break;
                 }
             case S_INT:
                 str = sym_get_string_value(sym);
-                fprintf(out, "RTD_%s=%s\n", sym->name, str);
+                fprintf(out, "BOZ_%s=%s\n", sym->name, str);
                 break;
             }
         }
@@ -742,23 +742,23 @@ int conf_write_autoconf(void)
             case no:
                 break;
             case mod:
-                fprintf(out, "RTD_%s=m\n", sym->name);
-                fprintf(tristate, "RTD_%s=M\n", sym->name);
-                fprintf(out_h, "#define RTD_%s_MODULE 1\n", sym->name);
+                fprintf(out, "BOZ_%s=m\n", sym->name);
+                fprintf(tristate, "BOZ_%s=M\n", sym->name);
+                fprintf(out_h, "#define BOZ_%s_MODULE 1\n", sym->name);
                 break;
             case yes:
-                fprintf(out, "RTD_%s=y\n", sym->name);
+                fprintf(out, "BOZ_%s=y\n", sym->name);
                 if (sym->type == S_TRISTATE)
-                    fprintf(tristate, "RTD_%s=Y\n",
+                    fprintf(tristate, "BOZ_%s=Y\n",
                             sym->name);
-                fprintf(out_h, "#define RTD_%s 1\n", sym->name);
+                fprintf(out_h, "#define BOZ_%s 1\n", sym->name);
                 break;
             }
             break;
         case S_STRING:
             str = sym_get_string_value(sym);
-            fprintf(out, "RTD_%s=\"", sym->name);
-            fprintf(out_h, "#define RTD_%s \"", sym->name);
+            fprintf(out, "BOZ_%s=\"", sym->name);
+            fprintf(out_h, "#define BOZ_%s \"", sym->name);
             while (1) {
                 l = strcspn(str, "\"\\");
                 if (l) {
@@ -778,14 +778,14 @@ int conf_write_autoconf(void)
         case S_HEX:
             str = sym_get_string_value(sym);
             if (str[0] != '0' || (str[1] != 'x' && str[1] != 'X')) {
-                fprintf(out, "RTD_%s=%s\n", sym->name, str);
-                fprintf(out_h, "#define RTD_%s 0x%s\n", sym->name, str);
+                fprintf(out, "BOZ_%s=%s\n", sym->name, str);
+                fprintf(out_h, "#define BOZ_%s 0x%s\n", sym->name, str);
                 break;
             }
         case S_INT:
             str = sym_get_string_value(sym);
-            fprintf(out, "RTD_%s=%s\n", sym->name, str);
-            fprintf(out_h, "#define RTD_%s %s\n", sym->name, str);
+            fprintf(out, "BOZ_%s=%s\n", sym->name, str);
+            fprintf(out_h, "#define BOZ_%s %s\n", sym->name, str);
             break;
         default:
             break;
@@ -795,12 +795,12 @@ int conf_write_autoconf(void)
     fclose(tristate);
     fclose(out_h);
 
-    name = getenv("RTD_KCONFIG_AUTOHEADER");
+    name = getenv("BOZ_KCONFIG_AUTOHEADER");
     if (!name)
         name = "include/generated/autoconf.h";
     if (rename(".tmpconfig.h", name))
         return 1;
-    name = getenv("RTD_KCONFIG_TRISTATE");
+    name = getenv("BOZ_KCONFIG_TRISTATE");
     if (!name)
         name = "include/config/tristate.conf";
     if (rename(".tmpconfig_tristate", name))

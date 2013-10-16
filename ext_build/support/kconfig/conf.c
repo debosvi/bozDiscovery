@@ -553,7 +553,7 @@ int main(int ac, char **av)
 	case set_mod:
 	case set_yes:
 	case set_random:
-		name = getenv("RTD_KCONFIG_ALLCONFIG");
+		name = getenv("BOZ_KCONFIG_ALLCONFIG");
 		if (name && !stat(name, &tmpstat)) {
 			conf_read_simple(name, S_DEF_USER);
 			break;
@@ -576,7 +576,7 @@ int main(int ac, char **av)
 
 	if (sync_kconfig) {
 		if (conf_get_changed()) {
-			name = getenv("RTD_KCONFIG_NOSILENTUPDATE");
+			name = getenv("BOZ_KCONFIG_NOSILENTUPDATE");
 			if (name && *name) {
 				fprintf(stderr,
 					_("\n*** "CONFIG_PROJNAME" configuration requires explicit update.\n\n"));

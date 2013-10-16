@@ -5,7 +5,7 @@ macro(add_test_if_enable dir var)
 endmacro()
 
 macro(boz_add_test comp uc )
-    string(TOUPPER ${comp} RTD_TEST_COMP)
+    string(TOUPPER ${comp} BOZ_TEST_COMP)
     add_executable(boz-${comp}-test-uc${uc} test_boz_${comp}_uc${uc}.c)
     target_link_libraries(boz-${comp}-test-uc${uc} ${ARGN})
     add_test(boz-${comp}-test-uc${uc} boz-${comp}-test-uc${uc})

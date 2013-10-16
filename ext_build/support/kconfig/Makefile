@@ -184,8 +184,8 @@ ifeq ("$(BUILD_TYPE)", "")
 else
 	@$(CURDIR)/createKconfig.sh $(BUILD_OUTPUT) $(PROJECT_BASE_DIR) $(PROJECT_BASE_DIR)/config/Config.in
 #	@$(CURDIR)/genconf.sh $(BUILD_OUTPUT) $(BUILD_TYPE) Config.in
-	@cd $(BUILD_OUTPUT) && mkdir -p config && RTD_KCONFIG_AUTOCONFIG=$(BUILD_OUTPUT)/config/auto.conf	\
-		RTD_KCONFIG_AUTOHEADER=$(BUILD_OUTPUT)/config/autoconf.h	\
+	@cd $(BUILD_OUTPUT) && mkdir -p config && BOZ_KCONFIG_AUTOCONFIG=$(BUILD_OUTPUT)/config/auto.conf	\
+		BOZ_KCONFIG_AUTOHEADER=$(BUILD_OUTPUT)/config/autoconf.h	\
 		$(KCONFIG_TOOL) $(KCONFIG_OPT) $(BUILD_OUTPUT)/Kconfig 
 	@$(MAKE) translate
 endif
