@@ -13,5 +13,5 @@ add_library(${DISCOVERY_LIB_NAME} SHARED
     ${DISCOVERY_LIB_SOURCES}
     )
 target_link_libraries(${DISCOVERY_LIB_NAME}
-    datastruct stddjb
+    datastruct random stdcrypto stddjb
     )

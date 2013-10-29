@@ -5,7 +5,7 @@
 #include "discovery.h"
 
 struct boz_disc_s {
-    int magic;
+    unsigned int magic;
     unsigned int idx;
 };
 
