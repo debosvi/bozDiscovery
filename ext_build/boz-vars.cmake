@@ -26,15 +26,13 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
 
-if("${CMAKE_BUILD_TYPE}" STREQUAL "release")
+option(BUILD_TYPE "Which build type to generate" "debug")
+         
+if("${BUILD_TYPE}" STREQUAL "release")
     set(CMAKE_BUILD_TYPE RELEASE)
-endif()
-
-if("${CMAKE_BUILD_TYPE}" STREQUAL "debug")
+elseif("${BUILD_TYPE}" STREQUAL "debug")
     set(CMAKE_BUILD_TYPE DEBUG)
-endif()
-
-if("${CMAKE_BUILD_TYPE}" STREQUAL "")
+else()
     set(CMAKE_BUILD_TYPE DEBUG)
 endif()
 
