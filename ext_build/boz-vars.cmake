@@ -51,6 +51,6 @@ set(CMAKE_C_FLAGS "-Wmissing-prototypes -Wbad-function-cast -Wshadow -Wfloat-equ
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wswitch-default")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wdeclaration-after-statement")
 add_definitions(-Wmissing-declarations -Wwrite-strings )
-add_definitions(-Wcast-qual -Wunknown-pragmas)
+add_definitions(-Wunknown-pragmas)
 add_definitions(-Wformat-security)
 add_definitions(-Wstrict-aliasing -Wreturn-type -Wmissing-noreturn)
