@@ -4,8 +4,8 @@ include(ExternalProject)
 set(3RD_DL_DIR ${CMAKE_BINARY_DIR}/.support)
 
 add_subdirectory(libsodium)
-add_subdirectory(zeromq)
-add_subdirectory(czmq)
+add_subdirectory(libzeromq)
+add_subdirectory(libczmq)
 
 
 set(SKA_PKG_DIR ${CMAKE_CURRENT_BINARY_DIR}/package)

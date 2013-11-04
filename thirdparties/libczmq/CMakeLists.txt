@@ -3,7 +3,7 @@ set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
 
 get_filename_component(dirname ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 ExternalProject_Add(${dirname}
-    DEPENDS             zeromq
+    DEPENDS             libzeromq
     STAMP_DIR           ${CMAKE_CURRENT_BINARY_DIR}/stamps
     DOWNLOAD_DIR        ${3RD_DL_DIR}
     URL                 http://download.zeromq.org/czmq-2.0.2.tar.gz
