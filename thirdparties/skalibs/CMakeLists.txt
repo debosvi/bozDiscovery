@@ -1,5 +1,5 @@
 
-set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
+set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build install test)
 
 get_filename_component(dirname ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
@@ -17,15 +17,15 @@ ExternalProject_Add(${dirname}
     BUILD_IN_SOURCE     0
     CONFIGURE_COMMAND  
         echo "${SKA_PKG_DIR}" > ${SKALIBS_CONF_COMPILE}/conf-sp_root &&
-        echo "${SKALIBS_OUTPUT_DIR}/bin" >  ${SKALIBS_CONF_COMPILE}/conf-install-command &&
-        echo "${SKALIBS_OUTPUT_DIR}/library/skarnet" >  ${SKALIBS_CONF_COMPILE}/conf-install-library &&
-        echo "${SKALIBS_OUTPUT_DIR}/library.so/skarnet" >  ${SKALIBS_CONF_COMPILE}/conf-install-library.so &&
-        echo "${SKALIBS_OUTPUT_DIR}/include/skarnet" >  ${SKALIBS_CONF_COMPILE}/conf-install-include &&
-        echo "${SKALIBS_OUTPUT_DIR}/etc" >  ${SKALIBS_CONF_COMPILE}/conf-etc &&
+        echo "${DEFAULT_INSTALL_DIR}/command" >  ${SKALIBS_CONF_COMPILE}/conf-install-command &&
+        echo "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/" >  ${SKALIBS_CONF_COMPILE}/conf-install-library &&
+        echo "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/" >  ${SKALIBS_CONF_COMPILE}/conf-install-library.so &&
+        echo "${DEFAULT_INSTALL_DIR}/include/skarnet" >  ${SKALIBS_CONF_COMPILE}/conf-install-include &&
+        echo "${DEFAULT_INSTALL_DIR}/etc" >  ${SKALIBS_CONF_COMPILE}/conf-etc &&
         echo "${SKARNET_SYSDEPS_DIR}" >  ${SKALIBS_CONF_COMPILE}/conf-install-sysdeps &&
         rm -f ${SKALIBS_CONF_COMPILE}/flag-slashpackage
     BUILD_COMMAND
-        mkdir -p ${SKALIBS_OUTPUT_DIR}/etc &&
+        mkdir -p ${DEFAULT_INSTALL_DIR}/etc &&
         make -C ${SKA_PKG_DIR}/prog/${SKALIBS_PACKAGE} 
     INSTALL_COMMAND make -C ${SKA_PKG_DIR}/prog/${SKALIBS_PACKAGE} install
     )
