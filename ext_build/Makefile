@@ -38,7 +38,7 @@ AUTOCONF:=$(BUILD_OUTPUT)/auto.conf
 default: help
 
 debug release : prepare
-	@cd $(BUILD_OUTPUT) && cmake -DCMAKE_BUILD_TYPE="$@" \
+	@cd $(BUILD_OUTPUT) && cmake -DBUILD_TYPE="$@" \
 	-G"Unix Makefiles" $(PROJECT_BASE_DIR)
 	@$(MAKE) $(VERBOSE)  all
 
