@@ -4,9 +4,18 @@
 
 #include "discovery.h"
 
+#define BOZ_DISC_URI_MAXLEN  256
+typedef struct {
+    unsigned int idx;
+    char uri[BOZ_DISC_URI_MAXLEN];
+} boz_disc_reg_t;    
+
 struct boz_disc_s {
     unsigned int magic;
     unsigned int idx;
+    gensetdyn reg;
 };
+
+extern int _boz_disc_iter(char *p, void *stuff);
 
 #endif

@@ -8,6 +8,9 @@ set(DISCOVERY_LIB_SOURCES
     startf.c
     end.c
     fd.c
+    register.c
+    unregister.c
+    geturi.c
     )
     
 add_library(${DISCOVERY_LIB_NAME} SHARED

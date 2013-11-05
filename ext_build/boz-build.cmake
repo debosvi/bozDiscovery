@@ -17,3 +17,11 @@ link_directories (${LIBRARY_INSTALL_DIR})
 macro(add_s6service svc_name svc_proc_name)
   message(STATUS "No process to supervise with project component ${svc_name}")
 endmacro()
+
+# if(${CMAKE_BUILD_TYPE} EQUAL RELEASE)
+    ADD_CUSTOM_TARGET(strip
+        COMMAND ${CMAKE_STRIP} *.so
+        WORKING_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+        COMMENT "Strip libs")
+# endif()
+
