@@ -4,6 +4,10 @@
 int boz_discovery_init(boz_disc_t *mgr) {
     unsigned int idx=-1;
     int ret=-1;
+    
+    if((*mgr)!=BOZ_DISC_ZERO)
+        return(errno=EINVAL,-1);
+    
     ret=gensetdyn_new (&g_discovery_storage, &idx);
     if(ret<0) return -1;
     (*mgr)=GENSETDYN_P(struct boz_disc_s, &g_discovery_storage, idx);
