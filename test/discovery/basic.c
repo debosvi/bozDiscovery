@@ -19,6 +19,8 @@ int main(int ac, char **av) {
         exit(EXIT_FAILURE);
     }
     
+    getchar();
+    
     ret=boz_discovery_term(&manager);
     if(ret<0) {
         fprintf(stderr, "Unable to term discovery manager, errno(%d/%s)\n", errno, strerror(errno));
