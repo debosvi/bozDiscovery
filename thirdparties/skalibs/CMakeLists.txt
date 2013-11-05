@@ -8,8 +8,8 @@ set(SKALIBS_CONF_COMPILE ${SKA_PKG_DIR}/prog/${SKALIBS_PACKAGE}/conf-compile)
 set(SKALIBS_OUTPUT_DIR ${SKARNET_STAGING_DIR}/skalibs)
 
 ExternalProject_Add(${dirname}
-#    DEPENDS             zeromq
-    STAMP_DIR           ${CMAKE_CURRENT_BINARY_DIR}/stamps
+#    DEPENDS             
+    STAMP_DIR           ${CMAKE_BINARY_DIR}/.stamps
     DOWNLOAD_DIR        ${3RD_DL_DIR}
     URL                 http://www.skarnet.org/software/skalibs/skalibs-1.4.2.tar.gz
     URL_MD5             e2bfa4447977024e1f2f91e9eb880baa
