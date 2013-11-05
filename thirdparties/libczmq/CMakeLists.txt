@@ -10,5 +10,5 @@ ExternalProject_Add(${dirname}
     URL_MD5             8077f31d50eb8490c8a1bc2860a9e69e
     SOURCE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/src
     BUILD_IN_SOURCE     1
-    CONFIGURE_COMMAND   ./configure --prefix=${DEFAULT_INSTALL_DIR} --with-libzmq=${DEFAULT_INSTALL_DIR} --enable-static --disable-shared
+    CONFIGURE_COMMAND   ./configure --prefix=${DEFAULT_INSTALL_DIR} --with-libzmq=${DEFAULT_INSTALL_DIR} --enable-static --enable-shared
     )
