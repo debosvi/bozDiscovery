@@ -47,47 +47,51 @@ int main(void) {
     g_beacon = zbeacon_new(BOZDISCO_SVC_DEF_PORT);
     if(g_beacon) {
         zbeacon_noecho(g_beacon);
-        zbeacon_set_interval(g_beacon, 2000);
-        zbeacon_publish(g_beacon, (byte*)announce, strlen(announce));
+//         zbeacon_set_interval(g_beacon, 2000);
+        zbeacon_subscribe(g_beacon, (byte*)announce, strlen(announce));
 //         fprintf(stderr, "%s: announce fd(%d)", PROG, (int)zbeacon_socket(g_beacon));
     }
     
     for (;;) {
         register unsigned int n = 1;
-        iopause_fd x[3 + n];
+        zmq_pollitem_t x[3 + n];
         int ri;
 //         zpoller_t *poller = NULL;
 
+        x[0].socket = NULL;
         x[0].fd = 0;
-        x[0].events = IOPAUSE_EXCEPT | IOPAUSE_READ;
+        x[0].events = ZMQ_POLLERR | ZMQ_POLLIN;
+        x[1].socket = NULL;
         x[1].fd = 1;
-        x[1].events = IOPAUSE_EXCEPT | (bufalloc_len(bufalloc_1) ? IOPAUSE_WRITE : 0);
+        x[1].events = ZMQ_POLLERR | (bufalloc_len(bufalloc_1) ? ZMQ_POLLOUT : 0);
+        x[2].socket = NULL;
         x[2].fd = bufalloc_fd(&asyncout);
-        x[2].events = IOPAUSE_EXCEPT | (bufalloc_len(&asyncout) ? IOPAUSE_WRITE : 0);
+        x[2].events = ZMQ_POLLERR | (bufalloc_len(&asyncout) ? ZMQ_POLLOUT : 0);
+        x[3].socket = zbeacon_socket(g_beacon);
+        x[3].fd = -1;
+        x[3].events = ZMQ_POLLERR | ZMQ_POLLIN;
         
-        
-
-        ri = iopause(x, 3 + n, 0, 0);
+        ri = zmq_poll(x, 3 + n, -1);
         if (ri < 0) {
-            strerr_diefu1sys(111, "iopause");
+            strerr_diefu1sys(111, "zmq_poll");
         }
 
         /* client closed => exit */
-        if ((x[0].revents | x[1].revents) & IOPAUSE_EXCEPT)
+        if ((x[0].revents | x[1].revents) & ZMQ_POLLERR)
             break;
 
         /* client reading => flush pending data */
-        if (x[1].revents & IOPAUSE_WRITE)
+        if (x[1].revents & ZMQ_POLLOUT)
             if ((bufalloc_flush(bufalloc_1) == -1) && !error_isagain(errno)) {
                 strerr_diefu1sys(111, "flush stdout");
             }
-        if (x[2].revents & IOPAUSE_WRITE)
+        if (x[2].revents & ZMQ_POLLOUT)
             if ((bufalloc_flush(&asyncout) == -1) && !error_isagain(errno)) {
                 strerr_diefu1sys(111, "flush asyncout");
             }
 
         /* client writing => get data and parse it */
-        if (buffer_len(buffer_0small) || x[0].revents & IOPAUSE_READ) {
+        if (buffer_len(buffer_0small) || x[0].revents & ZMQ_POLLIN) {
             int r;
             for (;;) {
                 r = sanitize_read(netstring_get(buffer_0small, &indata, &instate));
@@ -104,6 +108,15 @@ int main(void) {
                 }
             }
         }                       /* end if: stuff to read on stdin */
+        
+        if (x[3].revents & ZMQ_POLLIN) {
+            char *ipaddress=NULL, *beacon=NULL;
+            zstr_recvx (x[3].socket, &ipaddress, &beacon, NULL);
+            fprintf(stderr, "ip(%s), beacon(%s)\n", ipaddress, beacon);
+            free (ipaddress);
+            free (beacon);
+        }
+            
     }                           /* end loop: main iopause */
 
     zbeacon_destroy(&g_beacon);
