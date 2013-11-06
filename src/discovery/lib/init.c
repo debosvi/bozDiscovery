@@ -19,7 +19,7 @@ int boz_discovery_init(boz_disc_t *mgr) {
     (*mgr)->magic=g_disco_main.magic;
     (*mgr)->idx=idx;
     pthread_mutex_init(&(*mgr)->mutex, NULL);
-    gensetdyn_init(&(*mgr)->reg, sizeof(boz_disc_reg_t), 4, 0, 1);
+    gensetdyn_init(&(*mgr)->reg, sizeof(boz_disc_reg_t), 1, 0, 1);
 
     return (errno=0,0);   
 }

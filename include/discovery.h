@@ -18,6 +18,11 @@ typedef struct boz_disc_s *boz_disc_t;
  */
 #define BOZ_DISC_ZERO NULL
 
+/*! 
+ * Discovery URI string max length
+ */
+#define BOZ_DISC_URI_MAXLEN  256
+
 /*!
  * \param[in,out] mgr
  * \return error code

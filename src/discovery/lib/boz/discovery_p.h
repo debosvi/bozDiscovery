@@ -4,7 +4,6 @@
 
 #include "discovery.h"
 
-#define BOZ_DISC_URI_MAXLEN  256
 typedef struct {
     unsigned int    idx;
     char            uri[BOZ_DISC_URI_MAXLEN];

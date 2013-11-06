@@ -18,10 +18,6 @@
 #include "bozdisco_shared.h"
 #include "bozdisco_svc_p.h"
 
-static bufalloc asyncout = BUFALLOC_ZERO;
-
-static const char *announce = "BOZDISCOVERY";
-
 int main(void) {
     stralloc indata = STRALLOC_ZERO;
     unsigned int instate = 0;
@@ -34,24 +30,9 @@ int main(void) {
     if (sig_ignore(SIGPIPE) < 0)
         strerr_diefu1sys(111, "ignore SIGPIPE");
 
-    {
-        struct taia deadline, stamp;
-        taia_now(&stamp);
-        taia_addsec(&deadline, &stamp, 2);
-        if (!skaserver2_sync
-            (&asyncout, BOZDISCO_BANNER1, BOZDISCO_BANNER1_LEN, BOZDISCO_BANNER2, BOZDISCO_BANNER2_LEN, &deadline,
-             &stamp))
-            strerr_diefu1sys(111, "sync with client");
-    }
-
-    g_beacon = zbeacon_new(BOZDISCO_SVC_DEF_PORT);
-    if(g_beacon) {
-        zbeacon_noecho(g_beacon);
-//         zbeacon_set_interval(g_beacon, 2000);
-        zbeacon_subscribe(g_beacon, (byte*)announce, strlen(announce));
-//         fprintf(stderr, "%s: announce fd(%d)", PROG, (int)zbeacon_socket(g_beacon));
-    }
-    
+    bozdisco_svc_sync();
+    bozdisco_svc_init();
+        
     for (;;) {
         register unsigned int n = 1;
         zmq_pollitem_t x[3 + n];
@@ -112,13 +93,21 @@ int main(void) {
         if (x[3].revents & ZMQ_POLLIN) {
             char *ipaddress=NULL, *beacon=NULL;
             zstr_recvx (x[3].socket, &ipaddress, &beacon, NULL);
-            fprintf(stderr, "ip(%s), beacon(%s)\n", ipaddress, beacon);
+            
+            if(!bozdisco_svc_addnode(ipaddress, beacon)) {
+                fprintf(stderr, "new ip(%s), beacon(%s)\n", ipaddress, beacon);
+            }
+            else {
+                fprintf(stderr, "update ip(%s), beacon(%s)\n", ipaddress, beacon);    
+            }
+            
             free (ipaddress);
             free (beacon);
         }
             
     }                           /* end loop: main iopause */
 
-    zbeacon_destroy(&g_beacon);
+    bozdisco_svc_term();
+    
     return 0;
 }
