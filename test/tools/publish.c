@@ -10,18 +10,20 @@ static const char *announce = "BOZDISCOVERY";
 
 int main(int ac, char **av) {
     zbeacon_t *g_beacon=NULL;
+    char *uri=(char*)announce;
     
-    (void)ac;
-    (void)av;
+    if(ac>1)
+        uri=av[1];
     
     g_beacon = zbeacon_new(9999);
-    if(g_beacon) {
-        zbeacon_noecho(g_beacon);
-        zbeacon_set_interval(g_beacon, 2000);
-        zbeacon_publish(g_beacon, (byte*)announce, strlen(announce));
-        //         fprintf(stderr, "%s: announce fd(%d)", PROG, (int)zbeacon_socket(g_beacon));
-    }
-        
+    if(!g_beacon)
+        exit(EXIT_FAILURE);
+    
+    fprintf(stderr, "publish uri: %s\n", uri);
+    zbeacon_noecho(g_beacon);
+    zbeacon_set_interval(g_beacon, 2000);
+    zbeacon_publish(g_beacon, (byte*)uri, strlen(uri));
+            
     fprintf(stderr, "Press key to exit\n");
     getchar();
     

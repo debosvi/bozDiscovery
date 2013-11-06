@@ -11,3 +11,16 @@ add_executable(${PUBLISH_TOOL_NAME}
 target_link_libraries(${PUBLISH_TOOL_NAME}
     czmq
     )
+
+set(SUBSCRIBE_TOOL_NAME tool_subscribe)
+
+set(SUBSCRIBE_TOOL_SOURCES
+    subscribe.c
+    )
+    
+add_executable(${SUBSCRIBE_TOOL_NAME} 
+    ${SUBSCRIBE_TOOL_SOURCES}
+    )
+target_link_libraries(${SUBSCRIBE_TOOL_NAME}
+    czmq zmq
+    )
