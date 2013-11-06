@@ -1,5 +1,5 @@
 
-set_property(DIRECTORY PROPERTY EP_STEP_TARGETS configure build test)
+set_property(DIRECTORY PROPERTY EP_STEP_TARGETS download configure build install test)
 
 get_filename_component(dirname ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 ExternalProject_Add(${dirname}
