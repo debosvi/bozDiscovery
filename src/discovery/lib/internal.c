@@ -14,7 +14,8 @@ __attribute__((constructor))
 static void init() {
     fprintf(stderr, "discovery constructor\n");
     goodrandom_init ();
-    g_discovery_magic = goodrandom_int(0);
+    g_discovery_magic = goodrandom_int(0X5A5A5A5A);
+    fprintf(stderr, "\tdicovery magic(%p)\n", (void*)g_discovery_magic);
     g_disco_main = g_disco_zero;
     _bozdiscovery_startf(&g_disco_main, NULL, NULL);
 }

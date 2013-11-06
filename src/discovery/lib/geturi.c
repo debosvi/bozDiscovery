@@ -12,6 +12,9 @@ char* boz_discovery_geturi(const boz_disc_t mgr, const int id) {
     boz_disc_reg_t *p=NULL;
     unsigned int idx=-1;
     
+    if(!mgr)
+        return (errno=EINVAL,NULL);
+
     if(mgr->magic!=g_discovery_magic)
         return (errno=EINVAL,NULL);
     
@@ -21,5 +24,5 @@ char* boz_discovery_geturi(const boz_disc_t mgr, const int id) {
     
     p=GENSETDYN_P(boz_disc_reg_t, &mgr->reg, id);
 
-    return &p->uri[0];   
+    return strdup(&p->uri[0]);   
 }

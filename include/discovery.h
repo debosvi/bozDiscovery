@@ -27,7 +27,7 @@ typedef struct boz_disc_s *boz_disc_t;
  * errno managed:
  * - 0 on success
  * - EINVAL if mgr is not set to BOZ_DISC_ZERO as input value
- * - ENOSPC if mgr can't be instanciated
+ * - EIO if mgr can't be instanciated
  */
 int boz_discovery_init(boz_disc_t *mgr);
 
@@ -72,7 +72,7 @@ int boz_discovery_register(const boz_disc_t mgr, const char* uri);
  * errno managed:
  * - 0 on success
  * - EINVAL if mgr has not been set with \ref boz_discovery_init
- * - ENOENT if id has not been registerd before with \ref boz_discovery_register
+ * - ENOENT if id has not been registered before with \ref boz_discovery_register
  * 
  */
 int boz_discovery_unregister(const boz_disc_t mgr, const int id);
@@ -86,8 +86,10 @@ int boz_discovery_unregister(const boz_disc_t mgr, const int id);
  * errno managed:
  * - 0 on success
  * - EINVAL if mgr has not been set with \ref boz_discovery_init
- * - ENOENT if ID has not been registerd before with \ref boz_discovery_register
+ * - ENOENT if ID has not been registered before with \ref boz_discovery_register
  * 
+ * \note Returned uri string is a copy of the registered uri with \ref boz_discovery_register.
+ * It must be freed by caller.
  */
 char* boz_discovery_geturi(const boz_disc_t mgr, const int id);
 
