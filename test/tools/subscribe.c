@@ -8,9 +8,10 @@
 
 int main(int ac, char **av) {
     zbeacon_t *g_beacon=NULL;
+    char *uri=NULL;
     
-    (void)ac;
-    (void)av;
+    if(ac>1)
+        uri=av[1];
     
     g_beacon = zbeacon_new(9999);
     if(!g_beacon)
@@ -18,7 +19,7 @@ int main(int ac, char **av) {
     
     zbeacon_noecho(g_beacon);
     zbeacon_set_interval(g_beacon, 2000);
-    zbeacon_subscribe(g_beacon, NULL, 0);
+    zbeacon_subscribe(g_beacon, (byte*)uri, (uri?strlen(uri):0));
         
     fprintf(stderr, "Press key to exit\n");
     
